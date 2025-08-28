@@ -3,10 +3,14 @@ from sqlalchemy.orm import Session
 from typing import List
 import schemas, models, operation
 from database import Base, engine, get_db
+from jwt_authentication.protected_user_routes import user_router
+from jwt_authentication.operation import auth_router
 
 
 
 app= FastAPI()
+app.include_router(user_router)
+app.include_router(auth_router)
 
 Base.metadata.create_all(bind=engine)
 
