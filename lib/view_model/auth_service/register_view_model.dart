@@ -10,7 +10,7 @@ class RegisterViewModel with ChangeNotifier {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  Future<AuthModel?> registerUser(BuildContext context) async {ch
+  Future<AuthModel?> registerUser(BuildContext context) async {
     final name = nameController.text.trim();
     final email = emailController.text.trim();
     final password = passwordController.text.trim();

@@ -1,7 +1,4 @@
 
-
-
-=======
 # --- Backend ignores ---
 .env
 env/
@@ -9,7 +6,7 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
->>>>>>> 2a2ccbe (clean commit without large files)
+
 
 # --- Frontend ignores ---
 # Flutter build files
