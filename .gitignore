@@ -1,12 +1,23 @@
+
+
+
+=======
+# --- Backend ignores ---
 .env
 env/
 __pycache__/
-
-
+*.pyc
+*.pyo
+*.pyd
+>>>>>>> 2a2ccbe (clean commit without large files)
 
 # --- Frontend ignores ---
 # Flutter build files
 /build/
+
+.android/
+.ios/
+
 /android/.gradle/
 /android/app/build/
 *.iml
@@ -15,4 +26,14 @@ __pycache__/
 .flutter-plugins-dependencies
 .packages
 .dart_tool/
+
+
+
+# Ignore release/debug artifacts
+*.apk
+*.aab
+*.so
+
+# App secrets
 /lib/resources/api_urls.dart
+
