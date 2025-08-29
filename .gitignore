@@ -1,3 +1,18 @@
 .env
-env
-__pycache__
+env/
+__pycache__/
+
+
+
+# --- Frontend ignores ---
+# Flutter build files
+/build/
+/android/.gradle/
+/android/app/build/
+*.iml
+.idea/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.dart_tool/
+/lib/resources/api_urls.dart
