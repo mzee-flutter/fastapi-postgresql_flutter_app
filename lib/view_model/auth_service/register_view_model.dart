@@ -10,6 +10,9 @@ class RegisterViewModel with ChangeNotifier {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  AuthModel? _user;
+  AuthModel? get user => _user;
+
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
@@ -35,7 +38,7 @@ class RegisterViewModel with ChangeNotifier {
     notifyListeners();
     try {
       final user = await _registerRepo.registerUser(newUser);
-
+      _user = user;
       _isLoading = false;
       notifyListeners();
       ScaffoldMessenger.of(context).showSnackBar(

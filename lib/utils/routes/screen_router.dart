@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_postgres/utils/routes/routes_name.dart';
 import 'package:flutter_postgres/view/home_screen_view.dart';
 import 'package:flutter_postgres/view/login_screen_view.dart';
+import 'package:flutter_postgres/view/profile_screen_view.dart';
 import 'package:flutter_postgres/view/register_screen_view.dart';
 
 class ScreenRouter {
@@ -13,6 +14,9 @@ class ScreenRouter {
         return MaterialPageRoute(builder: (_) => LoginScreenView());
       case RoutesName.registerScreen:
         return MaterialPageRoute(builder: (_) => RegisterScreenView());
+
+      case RoutesName.profileScreen:
+        return MaterialPageRoute(builder: (_) => ProfileScreenView());
 
       default:
         return MaterialPageRoute(
