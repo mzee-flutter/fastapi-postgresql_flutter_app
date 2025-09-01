@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_postgres/view/update_item_view.dart';
 import 'package:flutter_postgres/view_model/get_items_view_model.dart';
 import 'package:provider/provider.dart';
+import '../utils/routes/routes_name.dart';
 import '../view_model/crud_view_model.dart';
 import 'add_item_view.dart';
 
@@ -18,12 +19,6 @@ class HomeScreenState extends State<HomeScreen> {
     final getItemVM = Provider.of<GetItemsViewModel>(context, listen: false);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // Future.microtask(
-      //   () => Provider.of<GetItemsViewModel>(
-      //     context,
-      //     listen: false,
-      //   ).fetchAllItems(),
-      // );
       await getItemVM.fetchAllItems();
     });
   }
@@ -36,6 +31,19 @@ class HomeScreenState extends State<HomeScreen> {
         title: Text("Home Screen"),
         centerTitle: true,
         backgroundColor: Colors.blue,
+        automaticallyImplyLeading: false,
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, RoutesName.profileScreen);
+              },
+              icon: Icon(Icons.person_2_rounded),
+              style: IconButton.styleFrom(backgroundColor: Colors.white),
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Consumer2<GetItemsViewModel, CrudViewModel>(
@@ -147,12 +155,12 @@ class HomeScreenState extends State<HomeScreen> {
                                                                   context,
                                                                   singleItem.id,
                                                                 );
-                                                            if (!mounted) {
-                                                              return;
+                                                            if (context
+                                                                .mounted) {
+                                                              Navigator.pop(
+                                                                context,
+                                                              );
                                                             }
-                                                            Navigator.pop(
-                                                              context,
-                                                            );
                                                           },
                                                           child: Text(
                                                             'Delete',

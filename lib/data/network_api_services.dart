@@ -6,10 +6,13 @@ import 'package:http/http.dart' as http;
 
 class NetworkApiServices extends BaseApiServices {
   @override
-  Future getGetApiRequest(String url) async {
+  Future getGetApiRequest(String url, Map<String, dynamic>? header) async {
     dynamic apiResponse;
     try {
-      final http.Response response = await http.get(Uri.parse(url));
+      final http.Response response = await http.get(
+        Uri.parse(url),
+        headers: header?.map((key, value) => MapEntry(key, value.toString())),
+      );
       apiResponse = checkAndReturnApiResponse(response);
     } on SocketException {
       throw FetchDataException('No internet Connection');
