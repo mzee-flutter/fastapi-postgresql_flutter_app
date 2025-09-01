@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../view_model/auth_service/login_user_info_view_model.dart';
 import '../view_model/auth_service/login_view_model.dart';
 import '../view_model/auth_service/register_view_model.dart';
 
@@ -38,25 +39,30 @@ class ProfileScreenView extends StatelessWidget {
                   child: Icon(Icons.person_rounded, size: 50),
                 ),
               ),
-              Material(
-                color: Colors.grey.shade300,
-                child: ListTile(
-                  leading: Text(
-                    registerVM.user?.id.toString() ??
-                        loginVM.loggedInUserInfo?.id.toString() ??
-                        '1',
-                  ),
-                  title: Text(
-                    registerVM.user?.name ??
-                        loginVM.loggedInUserInfo?.name ??
-                        'Unknown',
-                  ),
-                  subtitle: Text(
-                    registerVM.user?.email ??
-                        loginVM.loggedInUserInfo?.email ??
-                        'example@gmail.com',
-                  ),
-                ),
+              Consumer<LoginUserInfoViewModel>(
+                builder: (context, loggedInUserInfoVM, child) {
+                  return Material(
+                    color: Colors.grey.shade300,
+                    child: ListTile(
+                      leading: Text(
+                        registerVM.user?.id.toString() ??
+                            loggedInUserInfoVM.loggedInUserInfo?.id
+                                .toString() ??
+                            '1',
+                      ),
+                      title: Text(
+                        registerVM.user?.name ??
+                            loggedInUserInfoVM.loggedInUserInfo?.name ??
+                            'Unknown',
+                      ),
+                      subtitle: Text(
+                        registerVM.user?.email ??
+                            loggedInUserInfoVM.loggedInUserInfo?.email ??
+                            'example@gmail.com',
+                      ),
+                    ),
+                  );
+                },
               ),
             ],
           );

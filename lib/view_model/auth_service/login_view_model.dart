@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_postgres/models/login_request_model.dart';
 import 'package:flutter_postgres/repository/auth_repo/login_repo.dart';
-import 'package:flutter_postgres/repository/auth_repo/login_user_info_repo.dart';
-import '../../models/auth_model.dart';
+import 'package:provider/provider.dart';
+
 import '../../models/token_model.dart';
+import 'login_user_info_view_model.dart';
 
 class LoginViewModel with ChangeNotifier {
   final _loginRepo = LoginRepository();
-  final _loggedInUserRepo = LoginUserInfoRepository();
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
   TokenModel? _token;
   TokenModel? get token => _token;
-
-  AuthModel? _loggedInUserInfo;
-  AuthModel? get loggedInUserInfo => _loggedInUserInfo;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -35,12 +33,12 @@ class LoginViewModel with ChangeNotifier {
     notifyListeners();
     try {
       final token = await _loginRepo.loginUser(existingUser);
-      print('this is the token: ${token.accessToken}');
-      final userInfo = await _loggedInUserRepo.fetchLoginUserInfo(
-        token.accessToken,
-      );
-      _loggedInUserInfo = userInfo;
       _token = token;
+
+      Provider.of<LoginUserInfoViewModel>(
+        context,
+        listen: false,
+      ).fetchLoggedInUserInfo(token.accessToken);
       _isLoading = false;
       notifyListeners();
       return token;

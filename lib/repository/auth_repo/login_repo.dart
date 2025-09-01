@@ -11,7 +11,7 @@ class LoginRepository {
 
   Future<TokenModel> loginUser(LoginRequestModel user) async {
     final header = {'Content-Type': 'Application/json'};
-    final requestBody = {'username': user.email, 'password': user.password};
+    final requestBody = user.toJson();
     try {
       final response = await _services.getPostApiRequest(
         ApiURls.loginUrl,

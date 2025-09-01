@@ -9,15 +9,19 @@ class LoginUserInfoRepository {
   final BaseApiServices _services = NetworkApiServices();
 
   Future<AuthModel> fetchLoginUserInfo(String token) async {
-    final header = {'Authorization': 'Bearer $token'};
+    final header = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $token",
+    };
     try {
       final response = await _services.getGetApiRequest(
         ApiURls.getMeUrl,
         header,
       );
 
-      final item = AuthModel.fromJson(response);
-      return item;
+      final user = AuthModel.fromJson(response);
+
+      return user;
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
