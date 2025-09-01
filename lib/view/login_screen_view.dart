@@ -42,7 +42,7 @@ class LoginScreenView extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () async {
                     final user = await loginVM.loginUser(context);
-                    if (user?.token != null) {
+                    if (user?.accessToken != null) {
                       Navigator.pushNamed(context, RoutesName.homeScreen);
                     }
                   },
@@ -80,5 +80,3 @@ class LoginScreenView extends StatelessWidget {
     );
   }
 }
-
-/// if God will i will start to show the login return data when we do login request....

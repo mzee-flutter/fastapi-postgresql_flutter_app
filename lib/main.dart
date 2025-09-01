@@ -27,6 +27,7 @@ class ThisApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LoginViewModel()),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         initialRoute: RoutesName.loginScreen,
         onGenerateRoute: ScreenRouter.generateRoutes,
       ),

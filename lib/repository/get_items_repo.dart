@@ -12,7 +12,10 @@ class GetItemsRepo {
 
   Future<List<ItemModel>> fetchAllItems() async {
     try {
-      final response = await _services.getGetApiRequest(ApiURls.getItemsURl);
+      final response = await _services.getGetApiRequest(
+        ApiURls.getItemsURl,
+        null,
+      );
 
       final items = (response as List)
           .map((json) => ItemModel.fromJson(json))

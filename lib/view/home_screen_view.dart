@@ -31,6 +31,7 @@ class HomeScreenState extends State<HomeScreen> {
         title: Text("Home Screen"),
         centerTitle: true,
         backgroundColor: Colors.blue,
+        automaticallyImplyLeading: false,
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 10),
@@ -154,12 +155,12 @@ class HomeScreenState extends State<HomeScreen> {
                                                                   context,
                                                                   singleItem.id,
                                                                 );
-                                                            if (!mounted) {
-                                                              return;
+                                                            if (context
+                                                                .mounted) {
+                                                              Navigator.pop(
+                                                                context,
+                                                              );
                                                             }
-                                                            Navigator.pop(
-                                                              context,
-                                                            );
                                                           },
                                                           child: Text(
                                                             'Delete',
