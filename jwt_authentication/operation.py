@@ -30,7 +30,7 @@ def register_user(user: schemas.UserCreate, db: Session= Depends(get_db)):
 
 #in this we can't directly authorize the user on the swagger UI
 @auth_router.post("/login", response_model=schemas.Token)
-def login_user(user: schemas.Userlogin, db:Session= Depends(get_db)):
+def login_user(user: schemas.Userlogin  , db:Session= Depends(get_db)):
     loggedInUser= db.query(models.User).filter(models.User.email == user.email).first()
     if not loggedInUser or not  utils.verify_password(user.password, loggedInUser.hashed_password):
         raise HTTPException(detail="Invalid email and password")
@@ -40,4 +40,5 @@ def login_user(user: schemas.Userlogin, db:Session= Depends(get_db)):
 
 
     
+
 
