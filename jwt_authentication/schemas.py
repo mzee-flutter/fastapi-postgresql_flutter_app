@@ -12,6 +12,12 @@ class Userlogin(BaseModel):
     email:EmailStr
     password:str
 
+class TokenResponse(BaseModel):
+    access_token:str
+    token_type:str= "bearer"
+    refresh_token:str
+    expire_at:int
+
 
 class showUser(BaseModel):
     id:int
