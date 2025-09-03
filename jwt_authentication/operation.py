@@ -1,8 +1,11 @@
 from fastapi import Depends, HTTPException, APIRouter, status
-from . import models, schemas, utils
+from . import models, schemas
 from sqlalchemy.orm import Session
-from database import get_db
+from datetime import datetime, timedelta, timezone
+from database import get_db, REFRESH_TOKKEN_EXPIRE_TIME
+from utils import hash_password, verify_password, create_access_token, create_refresh_token
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+import jwt_authentication.models
 
 auth_router= APIRouter(prefix="/auth", tags=["Authentication"])
 oauth2_scheme= OAuth2PasswordBearer(tokenUrl="/auth/login")
@@ -15,7 +18,7 @@ def register_user(user: schemas.UserCreate, db: Session= Depends(get_db)):
     if existing_user:
         raise HTTPException(detail="Email already register")
     
-    hash_password= utils.hash_password(user.password)
+    hash_password= hash_password(user.password)
     new_user= models.User( name= user.name, email= user.email, hashed_password= hash_password)
     db.add(new_user)
     db.commit()
@@ -32,11 +35,21 @@ def register_user(user: schemas.UserCreate, db: Session= Depends(get_db)):
 @auth_router.post("/login", response_model=schemas.Token)
 def login_user(user: schemas.Userlogin  , db:Session= Depends(get_db)):
     loggedInUser= db.query(models.User).filter(models.User.email == user.email).first()
-    if not loggedInUser or not  utils.verify_password(user.password, loggedInUser.hashed_password):
+    if not loggedInUser or not  verify_password(user.password, loggedInUser.hashed_password):
         raise HTTPException(detail="Invalid email and password")
     
-    token= utils.create_token({"sub": str(loggedInUser.id)})
+    token= create_access_token({"sub": str(loggedInUser.id)})
     return {"access_token":token, "token_type": "bearer"}
+
+
+
+
+def createTokens(db: Session, user:models.User):
+    access_token= create_access_token(user.id, user.name, user.email)
+    raw_refresh, hashed_refresh= create_refresh_token()
+
+    expires_at= datetime.now(timezone.utc) + datetime(timedelta(days=REFRESH_TOKKEN_EXPIRE_TIME))
+    db_refresh= models.RefreshToken(user_id= user.id, token_hash= hashed_refresh, expire_at= expires_at)
 
 
     

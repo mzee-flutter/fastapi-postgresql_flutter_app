@@ -22,7 +22,9 @@ def verify_password(password, hash_password) -> bool:
 def _sha256(input:str) ->str:
     return hashlib.sha256(input.encode()).hexdigest()
 
-def create_token(data: dict):
+
+
+def create_access_token(data: dict):
     to_encode= data.copy()
     expire= datetime.now(UTC) + timedelta(minutes= ACCESS_TOKEN_EXPIRE_TIME)
     to_encode.update({"exp":expire})
