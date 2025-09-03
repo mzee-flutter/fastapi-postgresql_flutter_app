@@ -19,6 +19,9 @@ class TokenResponse(BaseModel):
     expire_at:int
 
 
+class RefreshRequest(BaseModel):
+    refresh_token:str
+
 class showUser(BaseModel):
     id:int
     name:str

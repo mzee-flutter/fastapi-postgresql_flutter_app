@@ -7,13 +7,8 @@ from utils import hash_password, verify_password, create_access_token, create_re
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 import jwt_authentication.models
 
-auth_router= APIRouter(prefix="/auth", tags=["Authentication"])
-oauth2_scheme= OAuth2PasswordBearer(tokenUrl="/auth/login")
 
-
-
-@auth_router.post('/register', response_model=schemas.showUser)
-def register_user(user: schemas.UserCreate, db: Session= Depends(get_db)):
+def register_user(user: schemas.UserCreate, db: Session):
     existing_user= db.query(models.User).filter(models.User.email== user.email).first()
     if existing_user:
         raise HTTPException(detail="Email already register")
@@ -32,14 +27,11 @@ def register_user(user: schemas.UserCreate, db: Session= Depends(get_db)):
 
 
 #in this we can't directly authorize the user on the swagger UI
-@auth_router.post("/login", response_model=schemas.Token)
-def login_user(user: schemas.Userlogin  , db:Session= Depends(get_db)):
+def login_user(user: schemas.Userlogin  , db:Session):
     loggedInUser= db.query(models.User).filter(models.User.email == user.email).first()
     if not loggedInUser or not  verify_password(user.password, loggedInUser.hashed_password):
         raise HTTPException(detail="Invalid email and password")
-    
-    token= create_access_token({"sub": str(loggedInUser.id)})
-    return {"access_token":token, "token_type": "bearer"}
+    return loggedInUser
 
 
 
