@@ -23,14 +23,14 @@ def register(body: schemas.UserCreate, db: Session= Depends(get_db)):
 @auth_router.post("/login/", response_model= schemas.TokenResponse)
 def login(body:schemas.Userlogin, db: Session= Depends(get_db)):
     db_user= operation.login_user(body, db)
-    access, refresh, exp= operation.createTokens(user= db_user ,db= db)
+    access, refresh, exp= operation.createTokens(db_user, db)
     return schemas.TokenResponse(access_token= access, refresh_token= refresh, expire_at= exp)
 
 
 
 @auth_router.post("/refresh/", response_model= schemas.TokenResponse)
 def refresh(body:schemas.RefreshRequest, db: Session= Depends(get_db)):
-    access, new_refresh, exp  = operation.refresh_access_token(body.refresh_token, db)
+    access, new_refresh, exp = operation.refresh_access_token( body.refresh_token, db)
     return schemas.TokenResponse(access_token= access, refresh_token= new_refresh, expire_at= exp)
 
 

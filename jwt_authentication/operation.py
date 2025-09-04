@@ -66,7 +66,13 @@ def refresh_access_token( raw_refresh:str, db:Session):
     db.add(record)
     db.commit()
 
-    access_token, expire_in= create_access_token(user.id, user.name, user.email)
+    data= {
+        "id":user.id,
+        "name":user.name,
+        "email":user.email
+    }
+
+    access_token, expire_in= create_access_token(data)
     new_raw_refresh, new_hashed_refresh = create_refresh_token()
     expire_at= datetime.now(timezone.utc) + timedelta(days=REFRESH_TOKKEN_EXPIRE_TIME)
 
