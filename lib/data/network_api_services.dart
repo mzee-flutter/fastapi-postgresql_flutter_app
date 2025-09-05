@@ -84,13 +84,13 @@ class NetworkApiServices extends BaseApiServices {
     return apiResponse;
   }
 
-  /// These two line print give the backend-response either bad response or success response
+  ///  The below print line give the backend-response either bad response or success response
   /// we can debug the backend code with these two line of code
   dynamic checkAndReturnApiResponse(http.Response response) {
-    print("statusCode: ${response.statusCode}");
-    print("Body: ${response.body}");
-    print("Request URl: ${response.request?.url}");
-    print('Requeset Headers: ${response.request?.headers}');
+    // print("statusCode: ${response.statusCode}");
+    // print("Body: ${response.body}");
+    // print("Request URl: ${response.request?.url}");
+    // print('Request Headers: ${response.request?.headers}');
     switch (response.statusCode) {
       case 200:
         dynamic jsonResponse = jsonDecode(response.body);
