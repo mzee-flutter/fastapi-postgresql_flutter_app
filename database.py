@@ -10,7 +10,8 @@ SQLALCHEMY_DATABASE_URL= "postgresql://mudasir:mudasir777@localhost:5432/crudDB"
 
 SECRETE_KEY= "This is going to the secrete key for the jwt token generation"
 ALGORITHM= "HS256"
-ACCESS_TOKEN_EXPIRE_TIME= 60
+ACCESS_TOKEN_EXPIRE_TIME= 30
+REFRESH_TOKKEN_EXPIRE_TIME= 7
 
 
 

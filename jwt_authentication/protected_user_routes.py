@@ -12,7 +12,7 @@ oauth2_schemes= OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 def get_current_user(token: str=(Depends(oauth2_schemes)), db: Session= Depends(get_db)):
     payload= utils.decode_token(token)
-    if payload is None:
+    if not payload:
         raise HTTPException(detail="Invalid or expire token")
     
     user = db.query(models.User).filter(models.User.id == int(payload["sub"])).first()
