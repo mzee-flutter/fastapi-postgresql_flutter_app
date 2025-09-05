@@ -39,3 +39,7 @@ def logout(body: schemas.RefreshRequest, db: Session= Depends(get_db)):
     operation.revoke_refresh_token(db, body.refresh_token)
     return{"Ok": "The user is successfully logout"}
     
+
+
+
+#Error 307 temprory redirect is the error of Url specfically the missing some slash(/)
