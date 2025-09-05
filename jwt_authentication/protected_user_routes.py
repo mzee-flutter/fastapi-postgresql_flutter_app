@@ -10,7 +10,7 @@ user_router= APIRouter(prefix="/users", tags= ["Users"])
 oauth2_schemes= OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
-def get_current_user(token: str=(Depends(oauth2_schemes)), db: Session= Depends(get_db)):
+def get_current_user(token: str=(Depends(oauth2_schemes)), db: Session= Depends(get_db)) -> schemas.showUser:
     payload= utils.decode_token(token)
     if not payload:
         raise HTTPException(detail="Invalid or expire token")
@@ -18,7 +18,7 @@ def get_current_user(token: str=(Depends(oauth2_schemes)), db: Session= Depends(
     user = db.query(models.User).filter(models.User.id == int(payload["sub"])).first()
     if not user:
         raise HTTPException(detail="user not found")
-    return user
+    return schemas.showUser.model_validate(user)
 
 
 @user_router.get('/me', response_model=schemas.showUser)

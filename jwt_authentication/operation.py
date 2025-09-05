@@ -38,10 +38,7 @@ def login_user(user: schemas.Userlogin  , db:Session):
 
 def createTokens(user:models.User, db: Session ):
 
-    payload= {"id":user.id,
-              "name":user.name,
-              "email":user.email,
-              }
+    payload= {"sub":str(user.id)}
     access_token, expire_in = create_access_token(payload)
     raw_refresh, hashed_refresh= create_refresh_token()
 
@@ -67,10 +64,7 @@ def refresh_access_token( raw_refresh:str, db:Session):
     db.commit()
 
     data= {
-        "id":user.id,
-        "name":user.name,
-        "email":user.email
-    }
+        "sub":str(user.id)}
 
     access_token, expire_in= create_access_token(data)
     new_raw_refresh, new_hashed_refresh = create_refresh_token()
