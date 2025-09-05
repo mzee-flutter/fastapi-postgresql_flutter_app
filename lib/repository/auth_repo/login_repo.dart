@@ -10,7 +10,7 @@ class LoginRepository {
   final BaseApiServices _services = NetworkApiServices();
 
   Future<TokenModel> loginUser(LoginRequestModel user) async {
-    final header = {'Content-Type': 'Application/json'};
+    final header = {'Content-Type': 'application/json'};
     final requestBody = user.toJson();
     try {
       final response = await _services.getPostApiRequest(
