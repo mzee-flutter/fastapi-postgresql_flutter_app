@@ -33,6 +33,7 @@ class LoginViewModel with ChangeNotifier {
     notifyListeners();
     try {
       final token = await _loginRepo.loginUser(existingUser);
+
       _token = token;
 
       Provider.of<LoginUserInfoViewModel>(
@@ -42,8 +43,9 @@ class LoginViewModel with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
       return token;
-    } catch (e) {
-      debugPrint('Error in LoginViewModel: ${e.toString()}');
+    } catch (e, stack) {
+      debugPrint('Error in LoginViewModel: $e');
+      debugPrint(stack.toString());
 
       ScaffoldMessenger.of(
         context,

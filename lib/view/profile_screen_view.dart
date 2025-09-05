@@ -53,7 +53,7 @@ class ProfileScreenView extends StatelessWidget {
                       title: Text(
                         registerVM.user?.name ??
                             loggedInUserInfoVM.loggedInUserInfo?.name ??
-                            'Unknown',
+                            'Get when login',
                       ),
                       subtitle: Text(
                         registerVM.user?.email ??
