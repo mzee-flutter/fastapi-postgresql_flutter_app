@@ -58,4 +58,10 @@ class RegisterViewModel with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void clearFields() {
+    nameController.clear();
+    emailController.clear();
+    passwordController.clear();
+  }
 }

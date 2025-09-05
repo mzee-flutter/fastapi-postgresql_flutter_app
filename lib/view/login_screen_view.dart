@@ -45,6 +45,8 @@ class LoginScreenView extends StatelessWidget {
                     if (user?.accessToken != null) {
                       Navigator.pushNamed(context, RoutesName.homeScreen);
                     }
+
+                    loginVM.clearFields();
                   },
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
                   child: loginVM.isLoading

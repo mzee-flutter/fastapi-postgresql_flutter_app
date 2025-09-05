@@ -54,6 +54,7 @@ class RegisterScreenView extends StatelessWidget {
                     if (user != null) {
                       Navigator.pushNamed(context, RoutesName.homeScreen);
                     }
+                    registerVM.clearFields();
                   },
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
                   child: registerVM.isLoading

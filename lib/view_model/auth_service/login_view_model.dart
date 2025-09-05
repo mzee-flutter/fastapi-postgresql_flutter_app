@@ -54,4 +54,9 @@ class LoginViewModel with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void clearFields() {
+    emailController.clear();
+    passwordController.clear();
+  }
 }

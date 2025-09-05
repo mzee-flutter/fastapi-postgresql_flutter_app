@@ -11,8 +11,8 @@ class RegisterRepository {
 
   Future<AuthModel> registerUser(RegisterRequestModel user) async {
     final header = {
-      'accept': "Application/json",
-      'Content-Type': 'Application/json',
+      'accept': "application/json",
+      'Content-Type': 'application/json',
     };
 
     final requestBody = user.toJson();
