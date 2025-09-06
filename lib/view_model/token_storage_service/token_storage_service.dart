@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class TokenStorageService {
@@ -43,6 +45,16 @@ class TokenStorageService {
     if (expiry == null) return true;
 
     return DateTime.now().millisecondsSinceEpoch > expiry;
+  }
+
+  Future<bool> hasValidSession() async {
+    final accessToken = await getAccessToken();
+    final refreshToken = await getRefreshToken();
+
+    if (accessToken == null || refreshToken == null) return false;
+
+    final expired = await isAccessTokenExpired();
+    return !expired;
   }
 
   Future<void> clearTokens() async {

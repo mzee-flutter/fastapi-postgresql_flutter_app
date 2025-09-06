@@ -5,8 +5,11 @@ import 'package:flutter_postgres/resources/api_urls.dart';
 import 'package:flutter_postgres/view_model/token_storage_service/token_storage_service.dart';
 
 class RefreshAccessTokenRepo {
-  final BaseApiServices _services = NetworkApiServices();
+  final BaseApiServices _services;
+
   final TokenStorageService _tokenStorage = TokenStorageService();
+
+  RefreshAccessTokenRepo(this._services);
 
   Future<void> getFreshAccessToken(String? token) async {
     final headers = {"Content-Type": "application/json"};
