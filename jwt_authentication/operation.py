@@ -39,15 +39,15 @@ def login_user(user: schemas.Userlogin  , db:Session):
 def createTokens(user:models.User, db: Session ):
 
     payload= {"sub":str(user.id)}
-    access_token, expire_in = create_access_token(payload)
+    access_token, expire_at = create_access_token(payload)
     raw_refresh, hashed_refresh= create_refresh_token()
 
     
-    expires_at= datetime.now(timezone.utc) + timedelta(days=REFRESH_TOKKEN_EXPIRE_TIME)
-    db_refresh= models.RefreshToken(user_id= user.id, token_hash= hashed_refresh, expire_at= expires_at)
+    refresh_expires_at= datetime.now(timezone.utc) + timedelta(days=REFRESH_TOKKEN_EXPIRE_TIME)
+    db_refresh= models.RefreshToken(user_id= user.id, token_hash= hashed_refresh, expire_at= refresh_expires_at)
     db.add(db_refresh)
     db.commit()
-    return access_token, raw_refresh, expire_in
+    return access_token, raw_refresh, expire_at
 
 
 def refresh_access_token( raw_refresh:str, db:Session):
