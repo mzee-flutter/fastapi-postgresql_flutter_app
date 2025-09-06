@@ -23,8 +23,10 @@ class RegisterRepository {
         header,
         requestBody,
       );
+      print(response);
 
       final user = AuthModel.fromJson(response);
+      print((user));
       return user;
     } catch (e) {
       debugPrint(e.toString());

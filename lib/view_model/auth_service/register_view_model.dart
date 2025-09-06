@@ -38,6 +38,7 @@ class RegisterViewModel with ChangeNotifier {
     notifyListeners();
     try {
       final user = await _registerRepo.registerUser(newUser);
+
       _user = user;
       _isLoading = false;
       notifyListeners();
@@ -46,8 +47,9 @@ class RegisterViewModel with ChangeNotifier {
       );
 
       return user;
-    } catch (e) {
+    } catch (e, stack) {
       debugPrint('Error in RegisterViewModel: $e');
+      debugPrint('Stack: $stack');
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Registration failed. Try again.')),

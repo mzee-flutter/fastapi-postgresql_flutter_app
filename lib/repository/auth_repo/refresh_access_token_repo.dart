@@ -1,24 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_postgres/data/base_api_services.dart';
 import 'package:flutter_postgres/data/network_api_services.dart';
-import 'package:flutter_postgres/models/login_request_model.dart';
 import 'package:flutter_postgres/resources/api_urls.dart';
 import 'package:flutter_postgres/view_model/token_storage_service/token_storage_service.dart';
 
-import '../../models/token_model.dart';
-
-class LoginRepository {
+class RefreshAccessTokenRepo {
   final BaseApiServices _services = NetworkApiServices();
   final TokenStorageService _tokenStorage = TokenStorageService();
 
-  Future<bool> loginUser(LoginRequestModel user) async {
-    final header = {'Content-Type': 'application/json'};
-    final requestBody = user.toJson();
+  Future<void> getFreshAccessToken(String? token) async {
+    final headers = {"Content-Type": "application/json"};
+
     try {
       final response = await _services.getPostApiRequest(
-        ApiURls.loginUrl,
-        header,
-        requestBody,
+        ApiURls.refreshAccessToken,
+        headers,
+        {"refresh_token": token},
       );
 
       final accessToken = response["access_token"];
@@ -30,12 +27,8 @@ class LoginRepository {
         refreshToken,
         accessTokenExpiry,
       );
-
-      // final user = TokenModel.fromJson(response);
-
-      return true;
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("RefreshAccessTokenRepo: $e");
       rethrow;
     }
   }
