@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_postgres/data/base_api_services.dart';
 import 'package:flutter_postgres/data/network_api_services.dart';
@@ -22,8 +20,13 @@ class RefreshAccessTokenRepo {
 
       final accessToken = response["access_token"];
       final refreshToken = response["refresh_token"];
+      final accessTokenExpiry = response["expire_at"];
 
-      await _tokenStorage.saveToken(accessToken, refreshToken);
+      await _tokenStorage.saveToken(
+        accessToken,
+        refreshToken,
+        accessTokenExpiry,
+      );
     } catch (e) {
       debugPrint("RefreshAccessTokenRepo: $e");
       rethrow;

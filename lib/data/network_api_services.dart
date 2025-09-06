@@ -2,22 +2,49 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_postgres/data/api_exception.dart';
 import 'package:flutter_postgres/data/base_api_services.dart';
+import 'package:flutter_postgres/repository/auth_repo/refresh_access_token_repo.dart';
+import 'package:flutter_postgres/view_model/token_storage_service/token_storage_service.dart';
 import 'package:http/http.dart' as http;
 
 class NetworkApiServices extends BaseApiServices {
+  final TokenStorageService _tokenStorage = TokenStorageService();
+  final RefreshAccessTokenRepo _accessTokenRepo = RefreshAccessTokenRepo();
   @override
   Future getGetApiRequest(String url, Map<String, dynamic>? header) async {
-    dynamic apiResponse;
     try {
+      final token = await _tokenStorage.getAccessToken();
+      final headers = {
+        "Content-Type": "application/json",
+        if (token != null) "Authorization": "Bearer $token",
+        ...?header,
+      };
       final http.Response response = await http.get(
         Uri.parse(url),
-        headers: header?.map((key, value) => MapEntry(key, value.toString())),
+        headers: headers.map((k, v) => MapEntry(k, v.toString())),
       );
-      apiResponse = checkAndReturnApiResponse(response);
+
+      if (response.statusCode == 401) {
+        await _accessTokenRepo.getFreshAccessToken(
+          await _tokenStorage.getRefreshToken(),
+        );
+
+        final newAccessToken = await _tokenStorage.getAccessToken();
+
+        final retryHeaders = {
+          "Content-Type": "application/json",
+          if (newAccessToken != null) "Authorization": "Bearer $newAccessToken",
+          ...?header,
+        };
+        final retryResponse = await http.get(
+          Uri.parse(url),
+          headers: retryHeaders.map((k, v) => MapEntry(k, v.toString())),
+        );
+        return checkAndReturnApiResponse(retryResponse);
+      }
+      return checkAndReturnApiResponse(response);
     } on SocketException {
       throw FetchDataException('No internet Connection');
     }
-    return apiResponse;
   }
 
   @override
@@ -26,23 +53,49 @@ class NetworkApiServices extends BaseApiServices {
     Map<String, dynamic> header,
     Map<String, dynamic> body,
   ) async {
-    dynamic apiResponse;
     try {
+      final token = await _tokenStorage.getAccessToken();
+      final headers = {
+        "Content-Type": "application/json",
+        if (token != null) "Authorization": "Bearer $token",
+        ...header,
+      };
       final http.Response response = await http
           .post(
             Uri.parse(url),
-            headers: header.map(
+            headers: headers.map(
               (key, value) => MapEntry(key, value.toString()),
             ),
             body: jsonEncode(body),
           )
           .timeout(Duration(seconds: 15));
 
-      apiResponse = checkAndReturnApiResponse(response);
+      if (response.statusCode == 401) {
+        await _accessTokenRepo.getFreshAccessToken(
+          await _tokenStorage.getRefreshToken(),
+        );
+        final newToken = await _tokenStorage.getAccessToken();
+
+        final retryHeaders = {
+          "Content-Type": "application/json",
+          if (newToken != null) "Authorization": "Bearer $newToken",
+          ...header,
+        };
+
+        final retryResponse = await http.post(
+          Uri.parse(url),
+          headers: retryHeaders.map(
+            (key, value) => MapEntry(key, value.toString()),
+          ),
+          body: jsonEncode(body),
+        );
+        return checkAndReturnApiResponse(retryResponse);
+      }
+
+      return checkAndReturnApiResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet Connection');
     }
-    return apiResponse;
   }
 
   @override
@@ -51,37 +104,83 @@ class NetworkApiServices extends BaseApiServices {
     Map<String, dynamic> header,
     Map<String, dynamic> body,
   ) async {
-    dynamic apiResponse;
     try {
+      final token = await _tokenStorage.getAccessToken();
+      final headers = {
+        "Content-Type": "application/json",
+        if (token != null) "Authorization": "Bearer $token",
+        ...header,
+      };
+
       final http.Response response = await http
           .put(
             Uri.parse(url),
-            headers: header.map(
+            headers: headers.map(
               (key, value) => MapEntry(key, value.toString()),
             ),
             body: jsonEncode(body),
           )
           .timeout(Duration(seconds: 15));
+      if (response.statusCode == 401) {
+        await _accessTokenRepo.getFreshAccessToken(
+          await _tokenStorage.getRefreshToken(),
+        );
+        final newToken = await _tokenStorage.getAccessToken();
 
-      apiResponse = checkAndReturnApiResponse(response);
+        final retryHeaders = {
+          "Content-Type": "application/json",
+          if (newToken != null) "Authorization": "Bearer $newToken",
+          ...header,
+        };
+
+        final retryResponse = await http.put(
+          Uri.parse(url),
+          headers: retryHeaders.map(
+            (key, value) => MapEntry(key, value.toString()),
+          ),
+          body: jsonEncode(body),
+        );
+        return checkAndReturnApiResponse(retryResponse);
+      }
+
+      return checkAndReturnApiResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet Connection');
     }
-    return apiResponse;
   }
 
   @override
   Future getDeleteApiRequest(String url) async {
-    dynamic apiResponse;
     try {
+      final token = await _tokenStorage.getAccessToken();
+      final headers = {
+        "Content-Type": "application/json",
+        if (token != null) "Authorization": "Bearer $token",
+      };
       final http.Response response = await http
-          .delete(Uri.parse(url))
+          .delete(Uri.parse(url), headers: headers)
           .timeout(Duration(seconds: 15));
-      apiResponse = checkAndReturnApiResponse(response);
+      if (response.statusCode == 401) {
+        await _accessTokenRepo.getFreshAccessToken(
+          await _tokenStorage.getRefreshToken(),
+        );
+        final newToken = await _tokenStorage.getAccessToken();
+
+        final retryHeaders = {
+          "Content-Type": "application/json",
+          if (newToken != null) "Authorization": "Bearer $newToken",
+        };
+
+        final retryResponse = await http.delete(
+          Uri.parse(url),
+          headers: retryHeaders,
+        );
+        return checkAndReturnApiResponse(retryResponse);
+      }
+      return checkAndReturnApiResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet Connection');
     }
-    return apiResponse;
   }
 
   ///  The below print line give the backend-response either bad response or success response
