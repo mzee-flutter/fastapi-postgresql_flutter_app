@@ -5,16 +5,23 @@ class TokenStorageService {
 
   static const String _accessTokenKey = "access_token";
   static const String _refreshTokenKey = "refresh_token";
-  static const String _accessTokenExpiry = "expire_at";
+  static const String _accessTokenExpiryKey = "access_token_expiry";
 
+  /// Save token + expiry (in seconds from now)
   Future<void> saveToken(
     String accessToken,
     String refreshToken,
-    String accessTokenExpiry,
+    int expiresIn, // e.g., 3600 from backend (seconds)
   ) async {
+    final expiryTimestamp =
+        DateTime.now().millisecondsSinceEpoch + (expiresIn * 1000);
+
     await _storage.write(key: _accessTokenKey, value: accessToken);
     await _storage.write(key: _refreshTokenKey, value: refreshToken);
-    await _storage.write(key: _accessTokenExpiry, value: accessTokenExpiry);
+    await _storage.write(
+      key: _accessTokenExpiryKey,
+      value: expiryTimestamp.toString(),
+    );
   }
 
   Future<String?> getAccessToken() async {
@@ -25,13 +32,22 @@ class TokenStorageService {
     return await _storage.read(key: _refreshTokenKey);
   }
 
-  Future<String?> getAccessTokenExpiry() async {
-    return await _storage.read(key: _accessTokenExpiry);
+  Future<int?> getAccessTokenExpiry() async {
+    final expiryStr = await _storage.read(key: _accessTokenExpiryKey);
+    return expiryStr != null ? int.tryParse(expiryStr) : null;
+  }
+
+  /// Returns true if the access token is expired
+  Future<bool> isAccessTokenExpired() async {
+    final expiry = await getAccessTokenExpiry();
+    if (expiry == null) return true;
+
+    return DateTime.now().millisecondsSinceEpoch > expiry;
   }
 
   Future<void> clearTokens() async {
     await _storage.delete(key: _accessTokenKey);
     await _storage.delete(key: _refreshTokenKey);
-    await _storage.delete(key: _accessTokenExpiry);
+    await _storage.delete(key: _accessTokenExpiryKey);
   }
 }
