@@ -16,18 +16,6 @@ class ProfileScreenView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
 
             children: [
-              Material(
-                color: Colors.grey.shade300,
-                child: ListTile(
-                  title: Text(
-                    'ACCESS-TOKEN: ${loginVM.token?.accessToken.toString() ?? 'Error'}',
-                  ),
-                  subtitle: Text(
-                    'TOKEN-TYPE: ${loginVM.token?.tokenType.toString() ?? 'Unknown'}',
-                  ),
-                ),
-              ),
-
               Center(
                 child: Container(
                   height: 100,

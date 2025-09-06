@@ -42,8 +42,11 @@ class LoginScreenView extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () async {
                     final user = await loginVM.loginUser(context);
-                    if (user?.accessToken != null) {
+                    if (user) {
+                      print('successfully logged in');
                       Navigator.pushNamed(context, RoutesName.homeScreen);
+                    } else {
+                      print("log in failed");
                     }
 
                     loginVM.clearFields();

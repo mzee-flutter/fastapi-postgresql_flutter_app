@@ -9,9 +9,9 @@ class LoginUserInfoViewModel with ChangeNotifier {
   AuthModel? _loggedInUserInfo;
   AuthModel? get loggedInUserInfo => _loggedInUserInfo;
 
-  Future<void> fetchLoggedInUserInfo(String token) async {
+  Future<void> fetchLoggedInUserInfo(String? token) async {
     try {
-      final user = await _loggedInUserRepo.fetchLoginUserInfo(token);
+      final user = await _loggedInUserRepo.fetchLoginUserInfo(token!);
       _loggedInUserInfo = user;
       notifyListeners();
     } catch (e) {

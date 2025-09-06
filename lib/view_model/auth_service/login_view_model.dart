@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_postgres/models/login_request_model.dart';
 import 'package:flutter_postgres/repository/auth_repo/login_repo.dart';
+import 'package:flutter_postgres/view_model/token_storage_service/token_storage_service.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/token_model.dart';
@@ -8,17 +9,15 @@ import 'login_user_info_view_model.dart';
 
 class LoginViewModel with ChangeNotifier {
   final _loginRepo = LoginRepository();
+  final TokenStorageService _tokenStorage = TokenStorageService();
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  TokenModel? _token;
-  TokenModel? get token => _token;
-
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  Future<TokenModel?> loginUser(context) async {
+  Future<bool> loginUser(context) async {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
 
@@ -32,17 +31,15 @@ class LoginViewModel with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     try {
-      final token = await _loginRepo.loginUser(existingUser);
-
-      _token = token;
+      final success = await _loginRepo.loginUser(existingUser);
 
       Provider.of<LoginUserInfoViewModel>(
         context,
         listen: false,
-      ).fetchLoggedInUserInfo(token.accessToken);
+      ).fetchLoggedInUserInfo(await _tokenStorage.getAccessToken());
       _isLoading = false;
       notifyListeners();
-      return token;
+      return success;
     } catch (e, stack) {
       debugPrint('Error in LoginViewModel: $e');
       debugPrint(stack.toString());
@@ -50,7 +47,7 @@ class LoginViewModel with ChangeNotifier {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Login Failed. Try Again!')));
-      return null;
+      return false;
     } finally {
       _isLoading = false;
       notifyListeners();
