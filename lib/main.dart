@@ -4,6 +4,7 @@ import 'package:flutter_postgres/utils/routes/screen_router.dart';
 import 'package:flutter_postgres/view_model/add_item_view_model.dart';
 import 'package:flutter_postgres/view_model/auth_service/login_user_info_view_model.dart';
 import 'package:flutter_postgres/view_model/auth_service/login_view_model.dart';
+import 'package:flutter_postgres/view_model/auth_service/logout_view_model.dart';
 import 'package:flutter_postgres/view_model/auth_service/register_view_model.dart';
 import 'package:flutter_postgres/view_model/crud_view_model.dart';
 import 'package:flutter_postgres/view_model/get_items_view_model.dart';
@@ -29,6 +30,7 @@ class ThisApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LoginViewModel()),
         ChangeNotifierProvider(create: (_) => LoginUserInfoViewModel()),
         ChangeNotifierProvider(create: (_) => SplashViewModel()),
+        ChangeNotifierProvider(create: (_) => LogoutViewModel()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -11,7 +11,7 @@ class TokenStorageService {
   Future<void> saveToken(
     String accessToken,
     String refreshToken,
-    int expiresIn, // e.g., 3600 from backend (seconds)
+    int expiresIn,
   ) async {
     final expiryTimestamp =
         DateTime.now().millisecondsSinceEpoch + (expiresIn * 1000);
@@ -43,6 +43,16 @@ class TokenStorageService {
     if (expiry == null) return true;
 
     return DateTime.now().millisecondsSinceEpoch > expiry;
+  }
+
+  Future<bool> hasValidSession() async {
+    final accessToken = await getAccessToken();
+    final refreshToken = await getRefreshToken();
+
+    if (accessToken == null || refreshToken == null) return false;
+
+    final expired = await isAccessTokenExpired();
+    return !expired;
   }
 
   Future<void> clearTokens() async {
