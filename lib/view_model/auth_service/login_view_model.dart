@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_postgres/models/login_request_model.dart';
 import 'package:flutter_postgres/repository/auth_repo/login_repo.dart';
-import 'package:flutter_postgres/view_model/token_storage_service/token_storage_service.dart';
+
 import 'package:provider/provider.dart';
 
-import '../../models/token_model.dart';
 import 'login_user_info_view_model.dart';
 
 class LoginViewModel with ChangeNotifier {
   final _loginRepo = LoginRepository();
-  final TokenStorageService _tokenStorage = TokenStorageService();
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -36,7 +34,7 @@ class LoginViewModel with ChangeNotifier {
       Provider.of<LoginUserInfoViewModel>(
         context,
         listen: false,
-      ).fetchLoggedInUserInfo(await _tokenStorage.getAccessToken());
+      ).fetchLoggedInUserInfo();
       _isLoading = false;
       notifyListeners();
       return success;

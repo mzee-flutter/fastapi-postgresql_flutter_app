@@ -19,8 +19,8 @@ class LogoutRepo {
         requestBody,
       );
 
-      _tokenStorage.clearTokens();
-      debugPrint(response);
+      await _tokenStorage.clearTokens();
+      debugPrint(response.toString());
 
       return true;
     } catch (e) {
@@ -29,5 +29,3 @@ class LogoutRepo {
     }
   }
 }
-
-/// just checking the logout on the client side
