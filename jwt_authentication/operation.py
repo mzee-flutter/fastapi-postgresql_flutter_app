@@ -82,9 +82,17 @@ def revoke_refresh_token(db:Session, raw_refresh:str):
     hash_token= _sha256(raw_refresh)
     record = db.query(models.RefreshToken).filter(models.RefreshToken.token_hash==hash_token).first()
 
-    if record and not record.revoked:
-        record.revoked= True
-        db.commit()
+    if not record:
+        raise HTTPException(status_code=400, detail="Invalid refresh token")
+    
+    if record.revoked:
+        raise HTTPException(status_code=400, detail="token already revoked")
+    
+    record.revoked = True
+    db.commit()
+
+    
+       
 
 
 
