@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../view_model/auth_service/login_user_info_view_model.dart';
 import '../view_model/auth_service/login_view_model.dart';
+import '../view_model/auth_service/logout_view_model.dart';
 import '../view_model/auth_service/register_view_model.dart';
 
 class ProfileScreenView extends StatelessWidget {
@@ -51,6 +52,27 @@ class ProfileScreenView extends StatelessWidget {
                     ),
                   );
                 },
+              ),
+              SizedBox(height: 40),
+              Material(
+                elevation: 3,
+                color: Colors.grey.shade300,
+                child: Consumer<LogoutViewModel>(
+                  builder: (context, logoutVM, child) {
+                    if (logoutVM.isLoading) {
+                      return Center(
+                        child: CircularProgressIndicator(color: Colors.blue),
+                      );
+                    }
+                    return ListTile(
+                      leading: Icon(Icons.logout_rounded),
+                      trailing: Text('Log out'),
+                      onTap: () async {
+                        await logoutVM.logoutUser(context);
+                      },
+                    );
+                  },
+                ),
               ),
             ],
           );

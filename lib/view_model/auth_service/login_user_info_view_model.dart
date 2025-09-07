@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_postgres/repository/auth_repo/login_user_info_repo.dart';
-
 import '../../models/auth_model.dart';
 
 class LoginUserInfoViewModel with ChangeNotifier {

@@ -8,12 +8,12 @@ class SplashViewModel with ChangeNotifier {
 
   Future<void> getInitialRoute(context) async {
     final hasSession = await _tokenStorage.hasValidSession();
-    final accessToken = await _tokenStorage.getAccessToken();
-    final expiry = await _tokenStorage.getAccessTokenExpiry();
-    print("accessTOken: $accessToken");
-    print("expirey: $expiry");
-    print("now: ${DateTime.now().millisecondsSinceEpoch}");
-    print("valid Session: $hasSession");
+    // final accessToken = await _tokenStorage.getAccessToken();
+    // final expiry = await _tokenStorage.getAccessTokenExpiry();
+    // print("accessTOken: $accessToken");
+    // print("expirey: $expiry");
+    // print("now: ${DateTime.now().millisecondsSinceEpoch}");
+    // print("valid Session: $hasSession");
 
     await Future.delayed(Duration(seconds: 3));
     if (hasSession) {

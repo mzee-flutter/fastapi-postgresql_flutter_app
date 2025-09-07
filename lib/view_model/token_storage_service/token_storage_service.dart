@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class TokenStorageService {
@@ -13,7 +11,7 @@ class TokenStorageService {
   Future<void> saveToken(
     String accessToken,
     String refreshToken,
-    int expiresIn, // e.g., 3600 from backend (seconds)
+    int expiresIn,
   ) async {
     final expiryTimestamp =
         DateTime.now().millisecondsSinceEpoch + (expiresIn * 1000);
