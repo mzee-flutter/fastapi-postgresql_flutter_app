@@ -13,7 +13,11 @@ oauth2_schemes= OAuth2PasswordBearer(tokenUrl="/auth/login")
 def get_current_user(token: str=(Depends(oauth2_schemes)), db: Session= Depends(get_db)) -> schemas.showUser:
     payload= utils.decode_token(token)
     if not payload:
-        raise HTTPException(detail="Invalid or expire token")
+        raise HTTPException(
+                            status_code= status.HTTP_401_UNAUTHORIZED, 
+                            detail="Invalid or expire token",
+                            headers={"WWW-Authenticate": "Bearer",}
+                        )
     
     user = db.query(models.User).filter(models.User.id == int(payload["sub"])).first()
     if not user:
