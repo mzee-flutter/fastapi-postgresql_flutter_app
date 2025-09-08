@@ -19,15 +19,22 @@ class ProfileScreenView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
 
               children: [
-                Center(
-                  child: Container(
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.grey,
+                Spacer(),
+                Container(
+                  height: 200,
+                  width: 200,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.grey.shade700,
+                  ),
+                  child: Text(
+                    "Profile",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
                     ),
-                    child: Icon(Icons.person_rounded, size: 50),
                   ),
                 ),
                 Consumer<LoginUserInfoViewModel>(
@@ -58,7 +65,7 @@ class ProfileScreenView extends StatelessWidget {
                     );
                   },
                 ),
-                SizedBox(height: 40),
+                Spacer(),
                 Material(
                   elevation: 3,
                   color: Colors.red,
