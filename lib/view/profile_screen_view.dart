@@ -13,68 +13,85 @@ class ProfileScreenView extends StatelessWidget {
     return Scaffold(
       body: Consumer2<RegisterViewModel, LoginViewModel>(
         builder: (context, registerVM, loginVM, child) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
 
-            children: [
-              Center(
-                child: Container(
-                  height: 100,
-                  width: 100,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.grey,
-                  ),
-                  child: Icon(Icons.person_rounded, size: 50),
-                ),
-              ),
-              Consumer<LoginUserInfoViewModel>(
-                builder: (context, loggedInUserInfoVM, child) {
-                  return Material(
-                    color: Colors.grey.shade300,
-                    child: ListTile(
-                      leading: Text(
-                        registerVM.user?.id.toString() ??
-                            loggedInUserInfoVM.loggedInUserInfo?.id
-                                .toString() ??
-                            '1',
-                      ),
-                      title: Text(
-                        registerVM.user?.name ??
-                            loggedInUserInfoVM.loggedInUserInfo?.name ??
-                            'Get when login',
-                      ),
-                      subtitle: Text(
-                        registerVM.user?.email ??
-                            loggedInUserInfoVM.loggedInUserInfo?.email ??
-                            'example@gmail.com',
-                      ),
+              children: [
+                Center(
+                  child: Container(
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey,
                     ),
-                  );
-                },
-              ),
-              SizedBox(height: 40),
-              Material(
-                elevation: 3,
-                color: Colors.grey.shade300,
-                child: Consumer<LogoutViewModel>(
-                  builder: (context, logoutVM, child) {
-                    if (logoutVM.isLoading) {
-                      return Center(
-                        child: CircularProgressIndicator(color: Colors.blue),
-                      );
-                    }
-                    return ListTile(
-                      leading: Icon(Icons.logout_rounded),
-                      trailing: Text('Log out'),
-                      onTap: () async {
-                        await logoutVM.logoutUser(context);
-                      },
+                    child: Icon(Icons.person_rounded, size: 50),
+                  ),
+                ),
+                Consumer<LoginUserInfoViewModel>(
+                  builder: (context, loggedInUserInfoVM, child) {
+                    return Material(
+                      elevation: 3,
+                      color: Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(5),
+
+                      child: ListTile(
+                        leading: Text(
+                          registerVM.user?.id.toString() ??
+                              loggedInUserInfoVM.loggedInUserInfo?.id
+                                  .toString() ??
+                              '1',
+                        ),
+                        title: Text(
+                          registerVM.user?.name ??
+                              loggedInUserInfoVM.loggedInUserInfo?.name ??
+                              'Get when login',
+                        ),
+                        subtitle: Text(
+                          registerVM.user?.email ??
+                              loggedInUserInfoVM.loggedInUserInfo?.email ??
+                              'example@gmail.com',
+                        ),
+                      ),
                     );
                   },
                 ),
-              ),
-            ],
+                SizedBox(height: 40),
+                Material(
+                  elevation: 3,
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(5),
+                  child: Consumer<LogoutViewModel>(
+                    builder: (context, logoutVM, child) {
+                      if (logoutVM.isLoading) {
+                        return Center(
+                          child: CircularProgressIndicator(color: Colors.blue),
+                        );
+                      }
+                      return ListTile(
+                        leading: Icon(
+                          Icons.logout_rounded,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+
+                        title: Text('Log out'),
+                        titleTextStyle: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
+
+                        onTap: () async {
+                          await logoutVM.logoutUser(context);
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           );
         },
       ),

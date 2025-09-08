@@ -8,7 +8,7 @@ import '../../models/auth_model.dart';
 class LoginUserInfoRepository {
   final BaseApiServices _services = NetworkApiServices();
 
-  Future<AuthModel> fetchLoginUserInfo(String token) async {
+  Future<AuthModel> fetchLoginUserInfo(String? token) async {
     final header = {
       "Content-Type": "application/json",
       "Authorization": "Bearer $token",

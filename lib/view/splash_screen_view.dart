@@ -28,8 +28,20 @@ class SplashScreenViewState extends State<SplashScreenView> {
         child: Container(
           height: 200,
           width: 200,
-          decoration: BoxDecoration(color: Colors.grey, shape: BoxShape.circle),
-          child: Text('Here is the app logo'),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade700,
+            shape: BoxShape.circle,
+          ),
+          child: Center(
+            child: Text(
+              'Logo',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 40,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
         ),
       ),
     );
